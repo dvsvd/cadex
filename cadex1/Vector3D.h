@@ -13,8 +13,12 @@ public:
 	Vector3D& operator=(const Vector3D&) = default;
 	Vector3D& operator=(Vector3D&&) = default;
 	~Vector3D() = default;
-	const float& x() const { return m_x; };
-	const float& y() const { return m_y; };
-	const float& z() const { return m_z; };
+
+	inline const float& x() const { return m_x; };
+	inline const float& y() const { return m_y; };
+	inline const float& z() const { return m_z; };
+	inline void setX(float x) { m_x = x; }
+	inline void setY(float y) { m_y = y; }
+	inline void setZ(float z) { m_z = z; }
 };
 

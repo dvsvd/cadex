@@ -25,21 +25,12 @@ public:
 	/*
 	* derivative - calculates the first derivative of the ellipse
 	* PARAMETERS:
-	*	- ts - std::vector of floats, for which derivative points are calculated
+	*	- t - parameter of parametric ellipse equation
+		representing the point of the ellipse
 	* RETURN:
-	*	vector of points representing derivative function of the ellipse
+	*	std::array<Vector3D, 2> of 2 points
+		representing ellipse tangent line in the point of t
 	*/
-	virtual std::array<Vector3D, 2> derivative(const std::vector<float>& ts);
-	/*
-	* derivative - calculates the first derivative of the ellipse
-	* PARAMETERS:
-	*	- begin - begin of t range
-	*	- end - end of t range
-	*	- h - step of t range (t[n+1] = t[n] + h)
-	* RETURN:
-	*	vector of Vector3D points representing derivative function of the ellipse
-	*/
-	virtual std::array<Vector3D, 2> derivative(float begin, float end, float h);
 	virtual std::array<Vector3D, 2> derivative(float t);
 	const float& a() const { return m_a; };
 	const float& b() const { return m_b; };

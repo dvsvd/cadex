@@ -20,39 +20,12 @@ bool Ellipse::ValidateNum(float n)
 
 Vector3D Ellipse::point(float t)
 {
+	if (!ValidateNum(t))
+		throw std::domain_error("Parameter t was given an invalid value");
 	t = std::fmod(t, 2.f * static_cast<float>(M_PI) + FLT_MIN); // restrict t to 0 <= t <= 2pi
 	float x = m_center.x() + m_a * std::cos(t);
 	float y = m_center.y() + m_b * std::sin(t);
 	return Vector3D(x, y);
-}
-
-std::array<Vector3D, 2> Ellipse::derivative(const std::vector<float>& ts)
-{
-	std::array<Vector3D, 2> ret;
-	for (auto& t : ts)
-	{
-
-	}
-	return ret;
-}
-
-std::array<Vector3D, 2> Ellipse::derivative(float begin, float end, float h)
-{
-	std::vector<float> vec;
-	if (begin > end)
-	{
-		float tmp = end;
-		end = begin;
-		begin = tmp;
-	}
-	size_t reserved = static_cast<size_t>(std::floor((end - begin) / h));
-	vec.reserve(reserved);
-	while (begin <= end)
-	{
-		vec.push_back(begin);
-		begin += h;
-	}
-	return derivative(vec);
 }
 
 std::array<Vector3D, 2> Ellipse::derivative(float t)
@@ -65,7 +38,7 @@ std::array<Vector3D, 2> Ellipse::derivative(float t)
 	// Calculate tangent line
 	float y1 = pt.y() + deriv * (1.f - pt.x());
 	float y2 = pt.y() + deriv * (-1.f - pt.x());
-	Vector2D pt1 = (1.f, y1);
-	Vector2D pt2 = (-1.f, y2);
+	Vector2D pt1(1.f, y1);
+	Vector2D pt2(-1.f, y2);
 	return std::array<Vector3D, 2> {std::move(pt1), std::move(pt2)};
 }

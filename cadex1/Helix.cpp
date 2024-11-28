@@ -2,25 +2,27 @@
 #include <stdexcept>
 #include <cmath>
 #include "MathFunctions.h"
+#include "Helix.h"
 
-#include "Circle.h"
-
-Circle::Circle(float radius, const Vector3D& center)
-	: Ellipse(radius, radius, center)
+Helix::Helix(float radius, float step, const Vector3D& center)
+	: Circle(radius, center)
 {
+	if (step <= 0.f)
+		throw std::logic_error("Invalid step value");
+	m_step = step;
 }
 
-Vector3D Circle::point(float t)
+Vector3D Helix::point(float t)
 {
-	if (!ValidateNum(t))
-		throw std::domain_error("Parameter t was given an invalid value");
-	t = std::fmod(t, 2.f * static_cast<float>(M_PI)); // restrict t to 0 <= t < 2pi
-	float x = m_center.x() + m_a * std::cos(t);
-	float y = m_center.y() + m_a * std::sin(t);
-	return Vector3D(x, y);
+	// Get the point's projecton to OXY plane
+	Vector3D pt = Circle::point(t);
+	//int n = std::floor(t / (2.f * static_cast<float>(M_PI)));
+	float z = m_center.z() + m_step * t / (2.f * static_cast<float>(M_PI));
+	pt.setZ(z);
+	return pt;
 }
 
-std::array<Vector3D, 2> Circle::derivative(float t)
+std::array<Vector3D, 2> Helix::derivative(float t)
 {
 	if (!ValidateNum(t))
 		throw std::domain_error("Parameter t was given an invalid value");
@@ -34,6 +36,3 @@ std::array<Vector3D, 2> Circle::derivative(float t)
 	Vector2D pt2(-1.f, y2);
 	return std::array<Vector3D, 2> {std::move(pt1), std::move(pt2)};
 }
-
-
-
