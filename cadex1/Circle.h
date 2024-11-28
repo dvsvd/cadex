@@ -11,7 +11,7 @@ public:
 	Circle(float radius, const Vector3D& center = Vector3D());
 	~Circle() = default;
 	Vector3D point(float t) override;
-	std::array<Vector3D, 2> derivative(float t) override;
+	Vector3D derivative(float t) override;
 	const float& r() const { return m_a; };
 };
 

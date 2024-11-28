@@ -1,8 +1,6 @@
 #pragma once
 #include "Vector3D.h"
 #include "Vector2D.h"
-#include <array>
-#include <vector>
 
 class Ellipse
 {
@@ -28,10 +26,9 @@ public:
 	*	- t - parameter of parametric ellipse equation
 		representing the point of the ellipse
 	* RETURN:
-	*	std::array<Vector3D, 2> of 2 points
-		representing ellipse tangent line in the point of t
+	* Unit tangent vector at the point of parameter t
 	*/
-	virtual std::array<Vector3D, 2> derivative(float t);
+	virtual Vector3D derivative(float t);
 	const float& a() const { return m_a; };
 	const float& b() const { return m_b; };
 	const Vector3D& center() const { return m_center; };
