@@ -36,4 +36,5 @@ Vector3D Helix::derivative(float t)
 	float norm = std::sqrt(m_a * m_a * sin * sin + m_a * m_a * cos * cos + m_b * m_b);
 	// Return unit tangent vector
 	return Vector3D(x / norm, y / norm, z / norm);
+	return Vector3D(x / norm, y / norm, z / norm);
 }
