@@ -10,13 +10,32 @@
 #include <random>
 #include <memory>
 
+template <
+	class InputIterator, class OutputIterator,
+	class UnaryOperator, class Pred
+>
+OutputIterator transform_if(InputIterator first1, InputIterator last1,
+	OutputIterator result, UnaryOperator op, Pred pred)
+{
+	while (first1 != last1)
+	{
+		if (pred(*first1)) {
+			*result = op(*first1);
+			++result;
+		}
+		++first1;
+	}
+	return result;
+}
+
+float sumOfRadii(const std::vector<std::shared_ptr<Circle>>& vec);
 int main()
 {
-	std::vector<std::unique_ptr<ICurve>> vec;
+	std::vector<std::shared_ptr<ICurve>> vec;
 	std::mt19937 rd;
 	std::uniform_int_distribution<> rngi;
 	std::uniform_real_distribution<float> rngf(0.f, 500.f);
-	//Fill the vector "in random manner"
+	//Fill the vector "in random manner" (task 2)
 	size_t size = 4 + rngi(rd) % 12;
 	vec.reserve(size);
 	for (size_t i = 0; i < size; i++)
@@ -27,19 +46,20 @@ int main()
 		{
 		case 0: // Ellipse
 		{
-			vec.push_back(std::make_unique<Ellipse>(rngf(rd), rngf(rd)));
+			vec.push_back(std::make_shared<Ellipse>(rngf(rd), rngf(rd)));
 			break;
 		}
 		case 1: // Circle
-			vec.push_back(std::make_unique<Circle>(rngf(rd)));
+			vec.push_back(std::make_shared<Circle>(rngf(rd)));
 			break;
 		case 2: // Helix
-			vec.push_back(std::make_unique<Helix>(rngf(rd), rngf(rd)));
+			vec.push_back(std::make_shared<Helix>(rngf(rd), rngf(rd)));
 			break;
 		default:
 			break;
 		}
 	}
+	// Task 3
 	const float t = static_cast<float>(M_PI_4);
 	for (auto& e : vec)
 	{
@@ -49,6 +69,28 @@ int main()
 			<< "Point: (" << pt.x() << "; " << pt.y() << "; " << pt.z() << ')' << std::endl
 			<< "Derivative: (" << deriv.x() << "; " << deriv.y() << "; " << deriv.z() << ')' << std::endl;
 	}
+	//Task 4; Contravariant shallow copy
+	std::vector<std::shared_ptr<Circle>> vec2;
+	transform_if(vec.begin(), vec.end(), std::back_inserter(vec2),
+		[](auto e) { return std::dynamic_pointer_cast<Circle>(e); },
+		[](auto ptr) { return typeid(Circle) == typeid(*ptr); });
+	//Task 5
+	std::sort(vec2.begin(), vec2.end(),
+		[](auto a, auto b) { return a->r() < b->r(); });
+	//Task 6
+	float fSumOfRadii = sumOfRadii(vec2);
+	std::cout << "Sum of radii in vec2: " << fSumOfRadii << std::endl;
 	return 0;
+}
+
+float sumOfRadii(const std::vector<std::shared_ptr<Circle>>& vec)
+{
+	float fSum = 0.f;
+#pragma omp parallel for reduction(+:fSum)
+	for (int i = 0; i < vec.size(); i++)
+	{
+		fSum += vec[i]->r();
+	}
+	return fSum;
 }
 

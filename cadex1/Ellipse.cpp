@@ -38,7 +38,6 @@ Vector3D Ellipse::derivative(float t)
 	float cos = std::cos(t);
 	float x = -m_a * sin;
 	float y = m_b * cos;
-	float norm = std::sqrt(m_a * m_a * sin * sin + m_a * m_a * cos * cos);
-	// Return unit tangent vector
-	return Vector2D(x / norm, y / norm);
+	// Return tangent vector
+	return Vector2D(x, y);
 }

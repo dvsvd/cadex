@@ -30,9 +30,8 @@ Vector3D Circle::derivative(float t)
 	float cos = std::cos(t);
 	float x = -m_a * sin;
 	float y = m_a * cos;
-	float norm = std::sqrt(m_a * m_a * sin * sin + m_a * m_a * cos * cos);
 	// Return unit tangent vector
-	return Vector2D(x / norm, y / norm);
+	return Vector2D(x, y);
 }
 
 
