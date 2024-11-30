@@ -1,7 +1,12 @@
 #pragma once
+#include "pch.h"
+#include "framework.h"
+#include "cadexDll.h"
 #include "Vector3D.h"
 
-class Vector2D : public Vector3D
+namespace CadexShapes {
+
+class CADEXDLL_API Vector2D : public Vector3D
 {
 private:
 	using Vector3D::setZ;
@@ -9,4 +14,4 @@ private:
 public:
 	Vector2D(float x = 0.f, float y = 0.f);
 };
-
+}
