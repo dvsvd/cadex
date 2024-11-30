@@ -14,7 +14,7 @@ on:
 env:
   # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: .
-
+  BASE_OUTPUT_PATH: ${{env.SOLUTION_FILE_PATH}}bin/
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
@@ -29,14 +29,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Compile Visual Studio project with MSBuild
+    - name: Compile Visual Studio x86 project with MSBuild
       shell: cmd 
       run: >
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
         msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
+        /p:BaseOutputPath=${{env.BASE_OUTPUT_PATH}}
+        /p:Platform=x86
       working-directory: ${{env.SOLUTION_FILE_PATH}}
-    - name: Upload artifact
+    - name: Compile Visual Studio x86 project with MSBuild
+      shell: cmd 
+      run: >
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
+        msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
+        /p:BaseOutputPath=${{env.BASE_OUTPUT_PATH}}
+        /p:Platform=x64
+      working-directory: ${{env.SOLUTION_FILE_PATH}}
+    - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{runner.os}}
-        path: "bin"
+        path: ${{env.BASE_OUTPUT_PATH}}
