@@ -1,9 +1,14 @@
+#include "pch.h"
+#include "framework.h"
+
 #define _USE_MATH_DEFINES
 #include <stdexcept>
 #include <cmath>
 #include "MathFunctions.h"
 
 #include "Circle.h"
+
+using namespace CadexShapes;
 
 Circle::Circle(float radius, const Vector3D& center)
 	: Ellipse(radius, radius, center)

@@ -1,8 +1,13 @@
 #pragma once
+#include "pch.h"
+#include "framework.h"
+#include "cadexDll.h"
 #include "Vector3D.h"
 #include "Ellipse.h"
 
-class Circle : public Ellipse
+namespace CadexShapes {
+
+class CADEXDLL_API Circle : public Ellipse
 {
 private:
 	using Ellipse::a;
@@ -29,4 +34,4 @@ public:
 	Vector3D derivative(float t) override;
 	const float& r() const { return m_a; };
 };
-
+}

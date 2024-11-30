@@ -1,0 +1,2 @@
+#define CADEXDLL_API __declspec(dllexport)
+#define CADEXDLL_API __declspec(dllimport)
