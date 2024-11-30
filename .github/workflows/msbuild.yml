@@ -34,7 +34,6 @@ jobs:
       run: >
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
         msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
-        /p:OutDir=bin\
         /p:Platform=x86
       working-directory: ${{env.SOLUTION_FILE_PATH}}
     - name: Compile Visual Studio x86 project with MSBuild
@@ -42,11 +41,12 @@ jobs:
       run: >
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
         msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
-        /p:OutDir=bin\
         /p:Platform=x64
       working-directory: ${{env.SOLUTION_FILE_PATH}}
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{runner.os}}
-        path: "bin"
+        path: |
+          Release
+          x64/Release
