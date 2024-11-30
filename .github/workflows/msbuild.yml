@@ -1,0 +1,64 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: MSBuild
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build_x86:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compile Visual Studio project with MSBuild
+      shell: cmd 
+      run: >
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
+        msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
+        /p:Platform=x86
+      # cd ${{env.BUILD_CONFIGURATION}} && del /f /q *.pdb
+      working-directory: ${{env.SOLUTION_FILE_PATH}}
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{runner.os}}_x86
+        path: |
+          ${{env.BUILD_CONFIGURATION}}
+  build_x64:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compile Visual Studio project with MSBuild
+      shell: cmd 
+      run: >
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
+        msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
+        /p:Platform=x64
+     # cd x64/${{env.BUILD_CONFIGURATION}} && del /f /q *.pdb
+      working-directory: ${{env.SOLUTION_FILE_PATH}}
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{runner.os}}_x64
+        path: |
+          x64/${{env.BUILD_CONFIGURATION}}
+
