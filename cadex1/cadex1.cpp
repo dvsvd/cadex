@@ -3,12 +3,14 @@
 #define _USE_MATH_DEFINES
 
 #include <iostream>
-#include "Circle.h"
-#include "Ellipse.h"
-#include "Helix.h"
 #include <vector>
 #include <random>
 #include <memory>
+
+#include "ICurve.h"
+#include "Ellipse.h"
+#include "Circle.h"
+#include "Helix.h"
 
 template <
 	class InputIterator, class OutputIterator,
@@ -28,10 +30,11 @@ OutputIterator transform_if(InputIterator first1, InputIterator last1,
 	return result;
 }
 
-float sumOfRadii(const std::vector<std::shared_ptr<Circle>>& vec);
+float sumOfRadii(const std::vector<std::shared_ptr<CadexShapes::Circle>>& vec);
+
 int main()
 {
-	std::vector<std::shared_ptr<ICurve>> vec;
+	std::vector<std::shared_ptr<CadexShapes::ICurve>> vec;
 	std::mt19937 rd;
 	std::uniform_int_distribution<> rngi;
 	std::uniform_real_distribution<float> rngf(0.f, 500.f);
@@ -46,14 +49,14 @@ int main()
 		{
 		case 0: // Ellipse
 		{
-			vec.push_back(std::make_shared<Ellipse>(rngf(rd), rngf(rd)));
+			vec.push_back(std::make_shared<CadexShapes::Ellipse>(rngf(rd), rngf(rd)));
 			break;
 		}
 		case 1: // Circle
-			vec.push_back(std::make_shared<Circle>(rngf(rd)));
+			vec.push_back(std::make_shared<CadexShapes::Circle>(rngf(rd)));
 			break;
 		case 2: // Helix
-			vec.push_back(std::make_shared<Helix>(rngf(rd), rngf(rd)));
+			vec.push_back(std::make_shared<CadexShapes::Helix>(rngf(rd), rngf(rd)));
 			break;
 		default:
 			break;
@@ -63,17 +66,17 @@ int main()
 	const float t = static_cast<float>(M_PI_4);
 	for (auto& e : vec)
 	{
-		Vector3D pt = e->point(t);
-		Vector3D deriv = e->derivative(t);
+		CadexShapes::Vector3D pt = e->point(t);
+		CadexShapes::Vector3D deriv = e->derivative(t);
 		std::cout << "Curve: " << typeid(*e).name() << std::endl
 			<< "Point: (" << pt.x() << "; " << pt.y() << "; " << pt.z() << ')' << std::endl
 			<< "Derivative: (" << deriv.x() << "; " << deriv.y() << "; " << deriv.z() << ')' << std::endl;
 	}
 	//Task 4; Contravariant shallow copy
-	std::vector<std::shared_ptr<Circle>> vec2;
+	std::vector<std::shared_ptr<CadexShapes::Circle>> vec2;
 	transform_if(vec.begin(), vec.end(), std::back_inserter(vec2),
-		[](auto e) { return std::dynamic_pointer_cast<Circle>(e); },
-		[](auto ptr) { return typeid(Circle) == typeid(*ptr); });
+		[](auto e) { return std::dynamic_pointer_cast<CadexShapes::Circle>(e); },
+		[](auto ptr) { return typeid(CadexShapes::Circle) == typeid(*ptr); });
 	//Task 5
 	std::sort(vec2.begin(), vec2.end(),
 		[](auto a, auto b) { return a->r() < b->r(); });
@@ -83,7 +86,7 @@ int main()
 	return 0;
 }
 
-float sumOfRadii(const std::vector<std::shared_ptr<Circle>>& vec)
+float sumOfRadii(const std::vector<std::shared_ptr<CadexShapes::Circle>>& vec)
 {
 	float fSum = 0.f;
 #pragma omp parallel for reduction(+:fSum)

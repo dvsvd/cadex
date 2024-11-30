@@ -1,8 +1,13 @@
+#include "pch.h"
+#include "framework.h"
+
 #define _USE_MATH_DEFINES
 #include <stdexcept>
 #include <cmath>
 #include "Ellipse.h"
 #include "MathFunctions.h"
+
+using namespace CadexShapes;
 
 Ellipse::Ellipse(float a, float b, const Vector3D& center)
 {

@@ -1,6 +1,11 @@
 #pragma once
+#include "pch.h"
+#include "framework.h"
+#include "cadexDll.h"
 
-class Vector3D
+namespace CadexShapes {
+
+class CADEXDLL_API Vector3D
 {
 protected:
 	float m_x;
@@ -21,4 +26,4 @@ public:
 	inline void setY(float y) { m_y = y; }
 	inline void setZ(float z) { m_z = z; }
 };
-
+}

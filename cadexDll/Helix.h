@@ -1,6 +1,12 @@
 #pragma once
+#include "pch.h"
+#include "framework.h"
+#include "cadexDll.h"
 #include "Circle.h"
-class Helix : public Circle
+
+namespace CadexShapes {
+
+class CADEXDLL_API Helix : public Circle
 {
 protected:
 	float m_step;
@@ -27,4 +33,4 @@ public:
 	Vector3D derivative(float t) override;
 	const float& step() const { return m_step; };
 };
-
+}

@@ -1,8 +1,13 @@
+#include "pch.h"
+#include "framework.h"
+
 #define _USE_MATH_DEFINES
 #include <stdexcept>
 #include <cmath>
 #include "MathFunctions.h"
 #include "Helix.h"
+
+using namespace CadexShapes;
 
 Helix::Helix(float radius, float b, const Vector3D& center)
 	: Circle(radius, center)

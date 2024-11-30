@@ -1,9 +1,14 @@
 #pragma once
+#include "pch.h"
+#include "framework.h"
+#include "cadexDll.h"
 #include "Vector3D.h"
 #include "Vector2D.h"
 #include "ICurve.h"
 
-class Ellipse : public ICurve
+namespace CadexShapes {
+
+class CADEXDLL_API Ellipse : public ICurve
 {
 protected:
 	float m_a;
@@ -35,4 +40,4 @@ public:
 	const Vector3D& center() const { return m_center; };
 	~Ellipse() = default;
 };
-
+}
