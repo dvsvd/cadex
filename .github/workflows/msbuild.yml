@@ -33,14 +33,15 @@ jobs:
       run: >
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
         msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
-        /p:Platform=x86
+        /p:Platform=x86 &&
+        cd ${{env.BUILD_CONFIGURATION}} && del /f /q *.pdb
       working-directory: ${{env.SOLUTION_FILE_PATH}}
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{runner.os}}_x86
         path: |
-          Release
+          ${{env.BUILD_CONFIGURATION}}
   build_x64:
     runs-on: windows-latest
 
@@ -51,12 +52,13 @@ jobs:
       run: >
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" &&
         msbuild /p:Configuration=${{env.BUILD_CONFIGURATION}}
-        /p:Platform=x64
+        /p:Platform=x64 &&
+        cd x64/${{env.BUILD_CONFIGURATION}} && del /f /q *.pdb
       working-directory: ${{env.SOLUTION_FILE_PATH}}
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{runner.os}}_x64
         path: |
-          x64/Release
+          x64/${{env.BUILD_CONFIGURATION}}
 
